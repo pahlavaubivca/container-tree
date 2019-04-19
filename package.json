@@ -1,0 +1,10 @@
+{
+   "name": "container-tree",
+   "version": "1.0.0",
+   "scripts": {
+      "build": "tsc"
+   },
+   "dependencies": {
+      "typescript": "^3.4.4"
+   }
+}
