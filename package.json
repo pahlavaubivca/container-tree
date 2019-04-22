@@ -5,6 +5,11 @@
       "build": "tsc"
    },
    "dependencies": {
-      "typescript": "^3.4.4"
+      "ts-loader": "^5.3.3"
+   },
+   "devDependencies": {
+      "typescript": "^3.4.4",
+      "webpack": "^4.30.0",
+      "webpack-cli": "^3.3.1"
    }
 }

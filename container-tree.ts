@@ -1,58 +1,66 @@
-export interface ISource {
-    type: "directory" | "file"
-    children?: Array<ISource>;
+import {Directory} from "./src/directory";
+import {File} from "./src/file";
 
-    [k: string]: any;
+export interface ISource {
+	type: "directory" | "file"
+	children?: Array<ISource>;
+
+	[k: string]: any;
 }
 
-type TTemplate = (source: ISource) => HTMLDivElement;
+type TTemplate = (source: ISource, directory?: Directory) => HTMLDivElement;
 
 export class ContainerTree {
-    public root: HTMLDivElement;
-    private _sources: Array<ISource> = [];
-    private _fileTemplate: TTemplate;
-    private _folderTemplate: TTemplate;
+	public root: HTMLDivElement;
+	private _sources: Array<ISource> = [];
+	private _fileTemplate: TTemplate;
+	private _folderTemplate: TTemplate;
 
-    constructor() {
-        this.root = document.createElement("div");
-    }
+	constructor() {
+		this.root = document.createElement("div");
+	}
 
-    public setSource(sources: Array<ISource>) {
-        this._sources = this._sources.concat(sources);
-        return this;
-    }
+	public setSource(sources: Array<ISource>) {
+		this._sources = this._sources.concat(sources);
+		this._buildTree(this._sources, this.root);
+		return this;
+	}
 
-    public setFolderTemplate(template: TTemplate) {
-        this._folderTemplate = template;
-        return this;
-    }
+	public setFolderTemplate(template: TTemplate) {
+		this._folderTemplate = template;
+		return this;
+	}
 
-    public setFileTemplate(template: TTemplate) {
-        this._fileTemplate = template;
-        return this;
-    }
+	public setFileTemplate(template: TTemplate) {
+		this._fileTemplate = template;
+		return this;
+	}
 
-    private _buildTree() {
-        this._sources.forEach(source => {
-            if (source.type === "directory") {
-                const _dir = this._folderTemplate(source);
-            } else {
-                const _file = this._fileTemplate(source);
-            }
-        });
-    }
+	// open struct to tree
+	public openToBottom() {
+	}
 
-    private _createDirectoryContainer() {
-        const _directoryWrapper = document.createElement("div");
-        _directoryWrapper.setAttribute("directory-wrapper", "");
-        const _directoryViewContainer = document.createElement("div");
-        _directoryViewContainer.setAttribute("directory-view", "");
-        const _directoryItemsContainer = document.createElement("div");
-        _directoryItemsContainer.setAttribute("directory-items", "");
-        _directoryWrapper
-            .appendChild(_directoryViewContainer)
-            .appendChild(_directoryItemsContainer);
-    }
+	//hide parent struct, view only current
+	public openOnFull() {
+	}
+
+	private _buildTree(sources: Array<ISource>, parent) {
+		sources.forEach(source => {
+			let _item;
+			if (source.type === "directory") {
+				const _item = new Directory();
+				const _face = this._folderTemplate(source, _item);
+				_item.faceWrapper.appendChild(_face);
+				if (source.children)
+					this._buildTree(source.children, _item.items);
+			} else {
+				_item = new File();
+				const _file = this._fileTemplate(source);
+				_item.container.appendChild(_file);
+			}
+			parent.appendChild(_item);
+		});
+	}
 }
 
 (window as any).ContainerTree = ContainerTree;
