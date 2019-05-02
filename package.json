@@ -2,7 +2,8 @@
    "name": "container-tree",
    "version": "1.0.0",
    "scripts": {
-      "build": "tsc"
+      "build": "tsc",
+      "webpack": "webpack"
    },
    "dependencies": {
       "ts-loader": "^5.3.3"

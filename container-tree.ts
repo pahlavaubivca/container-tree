@@ -11,13 +11,13 @@ export interface ISource {
 type TTemplate = (source: ISource, directory?: Directory) => HTMLDivElement;
 
 export class ContainerTree {
-	public root: HTMLDivElement;
+	public root: Directory;
 	private _sources: Array<ISource> = [];
 	private _fileTemplate: TTemplate;
 	private _folderTemplate: TTemplate;
 
 	constructor() {
-		this.root = document.createElement("div");
+		this.root = new Directory();
 	}
 
 	public setSource(sources: Array<ISource>) {
@@ -44,21 +44,25 @@ export class ContainerTree {
 	public openOnFull() {
 	}
 
-	private _buildTree(sources: Array<ISource>, parent) {
+	private _buildTree(sources: Array<ISource>, parent: Directory) {
 		sources.forEach(source => {
 			let _item;
 			if (source.type === "directory") {
-				const _item = new Directory();
-				const _face = this._folderTemplate(source, _item);
-				_item.faceWrapper.appendChild(_face);
+				_item = new Directory();
+				if (this._folderTemplate) {
+					const _face = this._folderTemplate(source, _item);
+					_item.faceWrapper.appendChild(_face);
+				}
 				if (source.children)
-					this._buildTree(source.children, _item.items);
+					this._buildTree(source.children, _item);
 			} else {
 				_item = new File();
-				const _file = this._fileTemplate(source);
-				_item.container.appendChild(_file);
+				if (this._fileTemplate) {
+					const _file = this._fileTemplate(source);
+					_item.container.appendChild(_file);
+				}
 			}
-			parent.appendChild(_item);
+			parent.setItem(_item);
 		});
 	}
 }

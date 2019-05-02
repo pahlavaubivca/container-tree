@@ -1,25 +1,46 @@
+import {File} from "./file";
+
 export class Directory {
 	public container: HTMLDivElement;
 	public faceWrapper: HTMLDivElement;
-	public items: HTMLDivElement;
+	public itemsContainer: HTMLDivElement;
+	public items: Array<File | Directory> = [];
+	public parentDirectory: Directory;
 	private clickToOpenElement: HTMLElement;
 
 	constructor() {
 		this.container = document.createElement("div");
+		this.container.setAttribute("is-folder", "true");
 		this.faceWrapper = document.createElement("div");
-		this.items = document.createElement("div");
+		this.faceWrapper.setAttribute("dir-face", "");
+		this.clickToOpenElement = this.faceWrapper;
+		this.itemsContainer = document.createElement("div");
+		this.itemsContainer.setAttribute("items-container", "");
+		// this.items = document.createElement("div");
 		this.container
 			.appendChild(this.faceWrapper)
-			.appendChild(this.items);
+		this.container
+			.appendChild(this.itemsContainer);
 	}
 
 	public open(): Directory {
 		this.container.setAttribute("open", "");
+		this.faceWrapper.style.display
+		this.parentDirectory.items.forEach(item => {
+			item.container.style.display = item != this ? "none" : "";
+		});
 		return this;
 	}
 
 	public close(): Directory {
+		this.container.style.display = "none";
 		this.container.removeAttribute("open");
+		return this;
+	}
+
+	public setItem(item: File | Directory) {
+		this.items.push(item);
+		this.itemsContainer.appendChild(item.container);
 		return this;
 	}
 

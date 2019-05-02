@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<style>
+    div[is-folder]{
+        width:300px;
+    }
+</style>
+<div id="cont"></div>
+<script src="main.js"></script>
+<script>
+
+	var tree = new ContainerTree();
+	tree.setSource([{
+		type: "directory"
+	}, {
+		type: "directory",
+		children: [
+			{
+				type: "directory"
+			},
+			{
+				type: "directory",
+				children: [{
+					type: "directory"
+				}, {
+					type: "directory"
+				}]
+			},
+			{
+				type: "file"
+			}
+		]
+	}, {
+		type: "directory"
+	}]);
+
+	document.getElementById("cont").appendChild(tree.root.container);
+</script>
+
+</body>
+</html>
