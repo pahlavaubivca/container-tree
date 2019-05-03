@@ -1,6 +1,8 @@
 {
    "name": "container-tree",
    "version": "1.0.0",
+   "main": "dist/main.js",
+   "typings": "dist/container-tree.d.ts",
    "scripts": {
       "build": "tsc",
       "webpack": "webpack"
