@@ -6,40 +6,63 @@
 </head>
 <body>
 <style>
-    div[is-folder]{
-        width:300px;
+    div[is-folder] {
+        width: 300px;
+    }
+    div[is-file] {
+        position:relative;
+        width: 50px;
+        height:50px;
+        background:magenta;
+        display: inline-block;
+        margin:5px;
+    }
+    div[dir-face] {
+        position: relative;
+        width: 50px;
+        height: 50px;
+        background: red;
+        display: inline-block;
+        margin:5px;
+    }
+
+    #cont {
+        position: relative;
+        width: 600px;
+        height: 600px;
+        background: rgba(150, 0, 150, 0.4);
     }
 </style>
 <div id="cont"></div>
 <script src="main.js"></script>
 <script>
 
-	var tree = new ContainerTree();
-	tree.setSource([{
-		type: "directory"
-	}, {
-		type: "directory",
-		children: [
-			{
-				type: "directory"
-			},
-			{
-				type: "directory",
-				children: [{
-					type: "directory"
-				}, {
-					type: "directory"
-				}]
-			},
-			{
-				type: "file"
-			}
-		]
-	}, {
-		type: "directory"
-	}]);
+    var tree = new ContainerTree();
+    tree.setSource([{
+        type: "directory"
+    }, {
+        type: "directory",
+        children: [
+            {
+                type: "directory"
+            },
+            {
+                type: "directory",
+                children: [{
+                    type: "directory"
+                }, {
+                    type: "directory"
+                }]
+            },
+            {
+                type: "file"
+            }
+        ]
+    }, {
+        type: "directory"
+    }]);
 
-	document.getElementById("cont").appendChild(tree.root.container);
+    document.getElementById("cont").appendChild(tree.root.container);
 </script>
 
 </body>
