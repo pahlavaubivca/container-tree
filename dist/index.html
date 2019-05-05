@@ -21,13 +21,17 @@
     }
 
     .folder-template {
+        margin: 5px;
         position: relative;
+        display: inline-block;
         width: 150px;
         height: 120px;
         background: black;
     }
 
     .file-template {
+        margin: 5px;
+        display: inline-block;
         position: relative;
         width: 150px;
         height: 120px;
@@ -42,86 +46,98 @@
 <div class="file-template" style="display: none;"></div>
 <script src="main.js"></script>
 <script>
-	const containerEl = document.getElementById("cont");
-	const backEl = document.getElementById("back");
-	const folderTemplateEl = document.getElementsByClassName("folder-template")[0];
-	const fileTemplateEl = document.getElementsByClassName("file-template")[0];
+    const containerEl = document.getElementById("cont");
+    const backEl = document.getElementById("back");
+    const folderTemplateEl = document.getElementsByClassName("folder-template")[0];
+    const fileTemplateEl = document.getElementsByClassName("file-template")[0];
 
-	var tree = new ContainerTree();
-	tree.setFolderTemplate((s, dir) => {
-		// dir.faceWrapper.appendChild(folderTemplateEl);
-		const tt = folderTemplateEl.cloneNode(true);
-		const clickable = tt.firstElementChild;
-		dir.setClickToOpenElement(clickable);
-		tt.style.display = "";
-		return tt;
-	});
-	tree.setFileTemplate((s, dir) => {
-		// dir.faceWrapper.appendChild(folderTemplateEl);
-		const tt = fileTemplateEl.cloneNode();
-		tt.style.display = "";
-		return tt;
-	});
-	tree.setSource([{
-		containerType: "directory"
-	}, {
-		containerType: "directory",
-		children: [
-			{
-				containerType: "directory",
-				children: [
-					{
-						containerType: "directory"
-					}, {
-						containerType: "directory"
-					}, {
-						containerType: "directory"
-					}, {
-						containerType: "directory"
-					}, {
-						containerType: "directory"
-					}, {
-						containerType: "directory",
-						children: [
-							{
-								containerType: "directory"
-							}, {
-								containerType: "directory"
-							}
-						]
-					}
-				]
-			},
-			{
-				type: "directory",
-				children: [
-					{
-						type: "directory"
-					}, {
-						type: "directory"
-					}, {
-						type: "directory",
-						children: [
-							{
-								type: "directory"
-							}, {
-								type: "directory"
-							}
-						]
-					}
-				]
-			},
-			{
-				type: "file"
-			}
-		]
-	}, {
-		type: "directory"
-	}]);
-	backEl.addEventListener("click", () => {
-		tree.back();
-	});
-	containerEl.appendChild(tree.root.container);
+    var tree = new ContainerTree();
+    tree.setFolderTemplate((s, dir) => {
+        // dir.faceWrapper.appendChild(folderTemplateEl);
+        const tt = folderTemplateEl.cloneNode(true);
+        const clickable = tt.firstElementChild;
+        dir.setClickToOpenElement(clickable);
+        tt.style.display = "";
+        return tt;
+    });
+    tree.setFileTemplate((s, dir) => {
+        // dir.faceWrapper.appendChild(folderTemplateEl);
+        const tt = fileTemplateEl.cloneNode();
+        tt.style.display = "";
+        return tt;
+    });
+    tree.setSource([{
+        containerType: "directory"
+    }, {
+        containerType: "directory",
+        children: [
+            {
+                containerType: "directory",
+                children: [
+                    {
+                        containerType: "directory"
+                    }, {
+                        containerType: "directory"
+                    }, {
+                        containerType: "directory"
+                    }, {
+                        containerType: "directory"
+                    }, {
+                        containerType: "directory"
+                    }, {
+                        containerType: "directory",
+                        children: [
+                            {
+                                containerType: "directory"
+                            }, {
+                                containerType: "directory"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                containerType: "directory",
+                children: [
+                    {
+                        containerType: "directory"
+                    }, {
+                        containerType: "directory"
+                    }, {
+                        containerType: "directory",
+                        children: [
+                            {
+                                type: "directory"
+                            }, {
+                                type: "directory"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                type: "file"
+            }
+        ]
+    }, {
+        type: "directory"
+    }]);
+    backEl.addEventListener("click", () => {
+        tree.back();
+    });
+    containerEl.appendChild(tree.root.container);
+    setTimeout(() => {
+        tree.setSource([{
+            containerType: "directory",
+            children: [
+                {
+                    containerType: "file"
+                }, {
+                    containerType: "file"
+                }
+            ]
+        }])
+    }, 2000)
 </script>
 
 </body>
