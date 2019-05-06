@@ -10,6 +10,10 @@ export interface ISource {
 }
 
 type TTemplate = (source: ISource, directory?: Directory) => HTMLDivElement;
+//todo
+// add block and inline items view
+// add directory or file to target dir
+// add for Directory and File status hidden
 
 /**
  * @desc Create tree structure from source object.
@@ -43,6 +47,13 @@ export class ContainerTree extends Explorer {
         return this;
     }
 
+    public setInline(): ContainerTree {
+        this._containers.forEach(cont => {
+            cont.container.style.display = "inline-block";
+        });
+        return this;
+    }
+
     /** @desc Define file custom element*/
     public setFileTemplate(template: TTemplate) {
         this._fileTemplate = template;
@@ -55,8 +66,6 @@ export class ContainerTree extends Explorer {
             let _item;
             if (source.containerType === "directory") {
                 _item = new Directory();
-                _item.setNestingLevel(nesting);
-                _item.parentDirectory = parent;
                 _item.onStateChange((state: EState, dir: Directory) => {
                     if (state === EState.open)
                         this.currentDir = dir;
@@ -74,6 +83,8 @@ export class ContainerTree extends Explorer {
                     _item.container.appendChild(_file);
                 }
             }
+            _item.setNestingLevel(nesting);
+            _item.parentDirectory = parent;
             parent.setItem(_item);
             this._containers.push(_item);
         });

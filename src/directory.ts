@@ -32,7 +32,7 @@ export class Directory {
         this.container.setAttribute("open", "");
         this.faceWrapper.style.display = "none";
         this.itemsContainer.style.display = "";
-        this.itemsContainer.style.overflow = "scroll";
+        // this.itemsContainer.style.overflow = "scroll";
         if (this.parentDirectory)
             this.parentDirectory.items.forEach(item => {
                 item.container.style.display = item != this ? "none" : "";
