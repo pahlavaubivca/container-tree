@@ -1,7 +1,7 @@
 {
    "name": "container-tree",
    "version": "1.0.0",
-   "main": "dist/main.js",
+   "main": "dist/container-tree.js",
    "typings": "dist/container-tree.d.ts",
    "scripts": {
       "build": "tsc",
