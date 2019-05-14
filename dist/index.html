@@ -16,130 +16,170 @@
 
     #back {
         position: relative;
-        width: 50px;
-        height: 30px;
-        background: red;
+        width: 25px;
+        height: 25px;
+        background: magenta;
+        cursor: pointer;
     }
 
-    .folder-template {
+    .arrow {
+        border: solid black;
+        border-width: 0 3px 3px 0;
+        display: inline-block;
+        padding: 3px;
+        transform: rotate(135deg) translate(-50%, -50%);
+        -webkit-transform: rotate(135deg) translate(-50%, -50%);
+        position: absolute;
+        left: 15%;
+        top: 30%;
+    }
+
+    .template span {
+        color: white;
+        line-height: 100%;
+        display: block;
+        font-size: 14px;
+        font-family: Consolas, sans-serif;
+        margin: 6px 0 0 4px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .template {
         margin: 5px;
         position: relative;
         display: inline-block;
-        width: 150px;
-        height: 30px;
-        background: black;
+        width: 200px;
+        height: 105px;
+        border-radius: 3px;
+        overflow: hidden;
     }
 
-    .file-template {
-        margin: 5px;
-        display: inline-block;
-        position: relative;
-        width: 150px;
-        height: 30px;
-        background: navy;
+    .folder {
+        background: rgb(30, 30, 30);
+        cursor: pointer;
+    }
+
+    .file {
+        background: rgb(130, 130, 130);
     }
 </style>
-<div id="back"></div>
-<div id="cont"></div>
-<div class="folder-template" style="display: none;">
-    <div id="clickable" style="position: absolute; width:25px;height:25px;background: red;"></div>
+<div id="back">
+    <div class="arrow"></div>
 </div>
-<div class="file-template" style="display: none;"></div>
+<div id="cont"></div>
+<!--<div class="template folder" style="display: none;">-->
+<!--</div>-->
+<!--<div class="template file" style="display: none;"></div>-->
 <script src="main.js"></script>
 <script>
-    const containerEl = document.getElementById("cont");
-    const backEl = document.getElementById("back");
-    const folderTemplateEl = document.getElementsByClassName("folder-template")[0];
-    const fileTemplateEl = document.getElementsByClassName("file-template")[0];
+	const containerEl = document.getElementById("cont");
+	const backEl = document.getElementById("back");
+	// const folderTemplateEl = document.getElementsByClassName("folder")[0];
+	// const fileTemplateEl = document.getElementsByClassName("file")[0];
 
-    var tree = new ContainerTree();
-    tree.setFolderTemplate((s, dir) => {
-        // dir.faceWrapper.appendChild(folderTemplateEl);
-        const tt = folderTemplateEl.cloneNode(true);
-        const clickable = tt.firstElementChild;
-        dir.setClickToOpenElement(clickable);
-        tt.style.display = "";
-        return tt;
-    });
-    tree.setFileTemplate((s, dir) => {
-        // dir.faceWrapper.appendChild(folderTemplateEl);
-        const tt = fileTemplateEl.cloneNode();
-        tt.style.display = "";
-        return tt;
-    });
-    tree.setSource([{
-        containerType: "directory"
-    }, {
-        containerType: "directory",
-        children: [
-            {
-                containerType: "directory",
-                children: [
-                    {
-                        containerType: "directory"
-                    }, {
-                        containerType: "directory"
-                    }, {
-                        containerType: "directory"
-                    }, {
-                        containerType: "directory"
-                    }, {
-                        containerType: "directory"
-                    }, {
-                        containerType: "directory",
-                        children: [
-                            {
-                                containerType: "directory"
-                            }, {
-                                containerType: "directory"
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                containerType: "directory",
-                children: [
-                    {
-                        containerType: "directory"
-                    }, {
-                        containerType: "directory"
-                    }, {
-                        containerType: "directory",
-                        children: [
-                            {
-                                type: "directory"
-                            }, {
-                                type: "directory"
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                type: "file"
-            }
-        ]
-    }, {
-        type: "directory"
-    }]);
-    backEl.addEventListener("click", () => {
-        tree.back();
-    });
-    containerEl.appendChild(tree.root.container);
-    setTimeout(() => {
-        tree.setSource([{
-            containerType: "directory",
-            children: [
-                {
-                    containerType: "file"
-                }, {
-                    containerType: "file"
-                }
-            ]
-        }])
-        //tree.setInline();
-    }, 2000)
+	var tree = new ContainerTree();
+	tree.setFolderTemplate((source) => {
+		return createTemplate(source, "folder");
+	});
+	tree.setFileTemplate((source) => {
+		return createTemplate(source, "file");
+	});
+
+	function createTemplate(source, fileOrDir) {
+		const container = document.createElement("div");
+		container.className = "template " + fileOrDir;
+		for (var [k, v] of Object.entries(source)) {
+			const _data = document.createElement("span");
+			if (k == "children")
+				v = v.length
+			_data.appendChild(document.createTextNode(`${k} : ${v}`));
+			container.appendChild(_data);
+		}
+		return container;
+	}
+
+	tree.setSource([{
+		"path": "photos",
+		"name": "photos",
+		"size": 600,
+		"type": "directory",
+		"children": [
+			{
+				"path": "photos/summer",
+				"name": "summer",
+				"size": 400,
+				"type": "directory",
+				"children": [
+					{
+						"path": "photos/summer/june",
+						"name": "june",
+						"size": 400,
+						"type": "directory",
+						"children": [
+							{
+								"path": "photos/summer/june/windsurf.jpg",
+								"name": "windsurf.jpg",
+								"size": 400,
+								"type": "file",
+								"extension": ".jpg"
+							}
+						]
+					}
+				]
+			},
+			{
+				"path": "photos/winter",
+				"name": "winter",
+				"size": 200,
+				"type": "directory",
+				"children": [
+					{
+						"path": "photos/winter/january",
+						"name": "january",
+						"size": 200,
+						"type": "directory",
+						"children": [
+							{
+								"path": "photos/winter/january/ski.png",
+								"name": "ski.png",
+								"size": 100,
+								"type": "file",
+								"extension": ".png"
+							},
+							{
+								"path": "photos/winter/january/snowboard.jpg",
+								"name": "snowboard.jpg",
+								"size": 100,
+								"type": "file",
+								"extension": ".jpg"
+							}
+						]
+					}
+				]
+			}
+		]
+	}]);
+
+	tree.setInline();
+	backEl.addEventListener("click", () => {
+		tree.back();
+	});
+	containerEl.appendChild(tree.root.container);
+	// setTimeout(() => {
+	// 	tree.setSource([{
+	// 		containerType: "directory",
+	// 		children: [
+	// 			{
+	// 				containerType: "file"
+	// 			}, {
+	// 				containerType: "file"
+	// 			}
+	// 		]
+	// 	}])
+	// 	//tree.setInline();
+	// }, 2000)
 </script>
 
 </body>
